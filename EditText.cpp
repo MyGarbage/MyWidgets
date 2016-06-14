@@ -18,7 +18,42 @@ EditText::~EditText(){}
 using namespace genv;
 
 void EditText::draw(){
-    Text::draw();
+    //Text::draw();
+
+    //keret
+    gout <<move_to(x,y) <<color(150,150,150)
+         <<line(sx, 0)  <<line(0, sy)
+         <<line(-sx, 0) <<line(0, -sy);
+
+    //kek hatter, feher betuk
+    gout <<color(150,150,150);
+    if(focused){
+        gout <<color(0,0,255) <<move_to(x+gout.twidth(" "), y+2)
+             <<box(gout.twidth(label)+2, sy-4);
+        gout <<color(255,255,255);
+    }
+
+    //szoveghossztol fuggoen
+    gout <<move_to(x,y+gout.cascent()+3);
+    if (gout.twidth(' '+label) <= sx){
+         gout <<text(' '+label);
+    }
+    else if (!focused){
+        bool eddig = false;
+        int i=0;
+        while (!eddig && i<label.length()){
+            if (gout.twidth(' '+label.substr(0,i))+' ' > sx){
+                gout <<text(' '+label.substr(0,i)+"..");
+                eddig = true;
+            }
+            i++;
+        }
+
+    }
+    else{
+        gout <<text(' '+label);
+    }
+
     //kurzor
     if(focused){
         gout <<move_to(x+gout.twidth(" ") + gout.twidth(label.substr(0,kurzor)), y+2)
@@ -30,7 +65,13 @@ void EditText::draw(){
 void EditText::handle(event ev){
     Text::handle(ev);
 
-    if (ev.type == ev_mouse && contains(ev.pos_x, ev.pos_y) && ev.button == btn_left){
+    if (ev.button == btn_left && (gout.twidth(label) > sx) &&
+       (ev.pos_x >= x && ev.pos_x <= x+gout.twidth(" "+label)) &&
+       (ev.pos_y >= y && ev.pos_y <=y+sy)){
+        keepFocused();
+    }
+
+    if (focused && ev.type == ev_mouse && ev.button == btn_left){  //&& contains(ev.pos_x, ev.pos_y)){
         bool eddig = false;
         for (int i = 0; i<label.length(); i++){
             if (gout.twidth(label.substr(0,i+1)) >= ev.pos_x - (x+gout.twidth(" ")) && !eddig) {
@@ -57,11 +98,12 @@ void EditText::handle(event ev){
 
         else if (ev.keycode == key_left && kurzor !=0) --kurzor;
         else if (ev.keycode == key_right && kurzor != label.length()) ++kurzor ;
+        else if (ev.keycode == key_home) kurzor = 0;
+        else if (ev.keycode == key_end) kurzor = label.length();
         else if (ev.keycode == key_delete && kurzor != label.length()){
                 setText(label.substr(0,kurzor)+ label.substr(kurzor+1,label.length()));
         }
-
+        else if (ev.keycode == key_enter) focused = false;
     }
-
 }
 
