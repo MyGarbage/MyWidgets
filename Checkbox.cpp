@@ -6,8 +6,10 @@ using namespace genv;
 
 Checkbox::Checkbox(int x0, int y0, int sx0, int sy0): Widget(x0,y0,sx0,sy0){
     checked = false;
-    sx = 20; //gout.cascent()+ gout.cdescent() + 3;
-    sy = sx;
+    if (sx == 0){
+        sx = 20; //gout.cascent()+ gout.cdescent() + 3;
+        sy = sx;
+    }
 }
 Checkbox::~Checkbox(){}
 
@@ -39,8 +41,6 @@ void Checkbox::handle(event ev){
 }
 
 bool Checkbox::contains(int posx, int posy){
-    if (posx >= x && posx <= x+sx && posy >= y && posy <= y+sy)
-        return true;
-    else return false;
+    return (posx >= x && posx <= x+sx && posy >= y && posy <= y+sy);
 }
 

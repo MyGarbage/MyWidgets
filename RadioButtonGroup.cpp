@@ -23,7 +23,11 @@ RadioButtonGroup::RadioButtonGroup(int x0, int y0, int sx0, int sy0, std::vector
     sy = buttonlabels.size()*20;
 
 }
-RadioButtonGroup::~RadioButtonGroup(){}
+RadioButtonGroup::~RadioButtonGroup(){
+    for(RadioButton *rb: radiobuttons){
+        delete rb;
+    }
+}
 
 void RadioButtonGroup::draw(){
 
@@ -43,6 +47,11 @@ void RadioButtonGroup::handle(event ev){
                     if( i != j) radiobuttons[j]->uncheck();
                 }
             }
+        }
+    }
+    if (!focused){
+        for (RadioButton *rb: radiobuttons){
+            rb->handle(ev);
         }
     }
 }

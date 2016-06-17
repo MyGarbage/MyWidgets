@@ -30,7 +30,10 @@ void Text::draw(){
 
     //if (label != "0") //csak sudokunal kellett
     //if (!fokuszalhato){  //ha nem EditText
-        gout <<move_to(x,y+gout.cascent()+3)  <<text(' '+label);
+        gout <<move_to(x,y) <<color(200,200,200) <<box(sx,sy);
+
+        gout <<move_to(x,y+gout.cascent()+3)  <<color(100,100,100)
+             <<text(' '+label);
     //}
 }
 

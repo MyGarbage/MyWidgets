@@ -3,10 +3,11 @@
 #include <string>
 using namespace genv;
 
-std::string szam_to_string(int szam){
-    std::stringstream ss;
-    ss <<szam;
-    return ss.str();
+template <typename T>
+std::string to_string(T &ezt){
+    std::stringstream stream;
+    stream << ezt;
+    return stream.str();
 }
 
 int stringtoszam(std::string szov){
@@ -20,9 +21,9 @@ int stringtoszam(std::string szov){
 //-------------------------------------------------------------------
 NumberControl::NumberControl(int x0, int y0, int sx0, int sy0, int min0, int max0, int szam0): Widget(x0, y0, sx0, sy0),
                             min(min0), max(max0), szam(szam0){
-    t1 = new EditText(x,y,std::max(gout.twidth(szam_to_string(min)),gout.twidth(szam_to_string(max))),0,szam_to_string(szam));
-    b1 = new Button(x+ t1->getSx() + 1, y,0,0, "plusz");
-    b2 = new Button(x+ t1->getSx() + 1, y+12,0,0, "minusz");
+    t1 = new EditText(x,y,std::max(gout.twidth(to_string(min)),gout.twidth(to_string(max))),0,to_string(szam));
+    b1 = new Button(x+ t1->getSx() + 1, y,0,0, "Control+");
+    b2 = new Button(x+ t1->getSx() + 1, y+12,0,0, "Control-");
     b1->eztcsinalja([&](){if(szam != max) ++szam;});
     b2->eztcsinalja([&](){if(szam != min) --szam;});
 }
@@ -44,10 +45,9 @@ void NumberControl::handle(genv::event ev){
 
         b1->handle(ev);
         b2->handle(ev);
-        t1->setText(szam_to_string(szam));
+        t1->setText(to_string(szam));
     }
     if(focused  && ev.type == ev_key){
-
 
         if (ev.keycode == key_up && szam != max) {++szam;}
         else if (ev.keycode == key_down && szam != min) {--szam;}
@@ -55,14 +55,18 @@ void NumberControl::handle(genv::event ev){
         else if (ev.keycode == key_pgdn && szam != min) {szam -= 5; if(szam<min) szam=min;}
         else if (ev.keycode == key_end) {szam=max;}
         else if (ev.keycode == key_home) {szam=min;}
-        t1->setText(szam_to_string(szam));
+        t1->setText(to_string(szam));
 
+        //csak ezek a billenytuk orokolnek az EditTextbol
         bool nemlehet = false;
         if (ev.keycode == key_right || ev.keycode == key_left) {}
         else if (ev.keycode == key_delete || ev.keycode == key_backspace) {}
         else if (ev.keycode > 47 && ev.keycode < 58){
-           szam = stringtoszam(t1->getText());
+           if (t1->getText() != ""){
+                szam = stringtoszam(t1->getText());
+           }
         }//nem ert && (szam > min && szam < max)) {}
+        //else if (ev.keycode == 45) {} //negativ szamokat nem lehet meg beirni
         else nemlehet = true;
 
 
@@ -77,10 +81,10 @@ void NumberControl::handle(genv::event ev){
                 else if (szam > max) szam = max;
             }
             else if(ev.keycode > 47 && ev.keycode < 58){
-                    //szam = ev.keycode - 48; //csak sudokunal jo
+                    //szam = ev.keycode - 48; //csak sudokunal, hogy a 0-t ne jelenitse meg
             }
 
-            //t1->setText(szam_to_string(szam));
+            //t1->setText(to_string(szam));
         }
 
     }

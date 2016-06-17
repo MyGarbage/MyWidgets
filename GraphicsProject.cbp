@@ -43,10 +43,16 @@
 		</Linker>
 		<Unit filename="Button.cpp" />
 		<Unit filename="Button.h" />
+		<Unit filename="Checkbox.cpp" />
+		<Unit filename="Checkbox.h" />
 		<Unit filename="EditText.cpp" />
 		<Unit filename="EditText.h" />
 		<Unit filename="NumberControl.cpp" />
 		<Unit filename="NumberControl.h" />
+		<Unit filename="RadioButton.cpp" />
+		<Unit filename="RadioButton.h" />
+		<Unit filename="RadioButtonGroup.cpp" />
+		<Unit filename="RadioButtonGroup.h" />
 		<Unit filename="Text.cpp" />
 		<Unit filename="Text.h" />
 		<Unit filename="Widget.cpp" />

@@ -7,7 +7,7 @@ Widget::~Widget(){}
 void Widget::handle(event ev){
     if(ev.type == ev_mouse){
             folottevan = contains(ev.pos_x, ev.pos_y);
-            if (ev.button == btn_left)
+            if (fokuszalhato && ev.button == btn_left)
                 focused = folottevan;//contains(ev.pos_x,ev.pos_y);
     }
 }

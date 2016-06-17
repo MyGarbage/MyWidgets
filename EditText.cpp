@@ -21,17 +21,18 @@ void EditText::draw(){
     //Text::draw();
 
     //keret
-    gout <<move_to(x,y) <<color(150,150,150)
+    gout <<move_to(x,y) <<color(0,0,0)//(150,150,150)
          <<line(sx, 0)  <<line(0, sy)
          <<line(-sx, 0) <<line(0, -sy);
 
     //kek hatter, feher betuk
     gout <<color(150,150,150);
     if(focused){
-        gout <<color(0,0,255) <<move_to(x+gout.twidth(" "), y+2)
+        gout <<color(51,153,255) <<move_to(x+gout.twidth(" "), y+2)
              <<box(gout.twidth(label)+2, sy-4);
         gout <<color(255,255,255);
     }
+    else gout <<color(0,0,0);
 
     //szoveghossztol fuggoen
     gout <<move_to(x,y+gout.cascent()+3);
